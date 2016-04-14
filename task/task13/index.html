@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>css3</title>
+	<style type="text/css">
+	*{
+		margin: 0px;
+		padding: 0px;
+	}
+		.topTable table{
+			font-weight: bold;	
+			margin-left: 100px;
+		}
+		.topTable table th{
+			text-align: left;
+			border: 1px solid #fff;
+			background-color: #090909;
+			color: white;
+			padding: 5px;
+		}
+		.topTable table td{
+			border: 1px solid #fff;
+			padding: 2px;
+		}
+		tr:nth-child(odd){
+			background-color: #ccc;
+		}
+		.top{
+			color: red;
+		}
+		form{
+			margin-top: 50px;
+			margin-left: 100px;
+		}
+		@keyframes inputWidth{
+			from{width: 150px}
+			to{width: 200px}
+		}
+		@-webkit-keyframes inputWidth{
+			from{width: 150px}
+			to{width: 200px}
+		}
+		@-o-keyframes inputWidth{
+			from{width: 150px}
+			to{width: 200px}
+		}
+		@-moz-keyframes inputWidth{
+			from{width: 150px}
+			to{width: 200px}
+		}
+		
+		.inputs:focus{
+			animation: inputWidth 1s ease forwards;
+			-webkit-animation: inputWidth 1s ease forwards;
+			-moz-animation: inputWidth 1s ease forwards;
+			-o-animation: inputWidth 1s ease forwards;
+		}
+		.banner{
+			position: relative;
+			margin-top: 30px;
+			margin-left: 100px;		
+			width: 200px;
+			height: 100px;
+			overflow: hidden;
+
+		}
+		.mainImg{
+			position: absolute;
+			left: 0px;
+			top:0px;
+			width: 600px;
+			-webkit-transition: left 2s;
+		}
+		.mainImg li{
+			list-style: none;
+			float: left;
+			width: 200px;
+			height: 100px;
+		}
+		.mainImg li:nth-child(1){
+			background-color: green;
+		}
+		.mainImg li:nth-child(2){
+			background-color: blue;
+		}
+		.mainImg li:nth-child(3){
+			background-color: yellow;
+		}
+		.banner .controller{
+			position: absolute;
+			right: 0px;
+			bottom: 0px;
+			opacity: 0.5;
+			text-align: center;
+			background-color: #999;
+			width: 60px;
+			cursor: pointer;
+		}
+		.banner .controller li{
+			list-style: none;
+			float:left;
+			width: 18px;
+			border: 1px solid #fff;
+		}
+		.banner .controller li a{
+			text-decoration: none;
+			color: white;
+			display:block;
+		}
+		#img1:target .mainImg{
+			left:0px;
+		}
+		#img2:target .mainImg{
+			left:-200px;
+		}
+		#img3:target .mainImg{
+			left:-400px;
+		}
+	</style>
+</head>
+<body>
+	<div class="topTable">
+		<table cellspacing="0">
+			<tr>
+				<th>排名</th>
+				<th>网站</th>
+				<th>热度</th>
+			</tr>
+			<tr class="top">
+				<td >1.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr class="top">
+				<td>2.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr class="top">
+				<td>3.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr>
+				<td>4.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr>
+				<td>5.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr>
+				<td>6.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr>
+				<td>7.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+			<tr>
+				<td>8.</td>
+				<td>百度前端技术学院</td>
+				<td>18200</td>
+			</tr>
+		</table>
+	</div>
+	<form action="#" method="post">
+		<input type="text" class="inputs" placeholder="点我宽度变化">
+	</form>
+	<div class="banner" >
+		<div id="img1">
+			<div id="img2">
+				<div id="img3">
+					<ul class="mainImg">
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+			</div>		
+		</div>		
+		<ul class="controller"> 
+			<li><a href="#img1">1</a></li>
+			<li><a href="#img2">2</a></li>
+			<li><a href="#img3">3</a></li>
+		</ul>
+	</div>
+	
+</body>
+</html>

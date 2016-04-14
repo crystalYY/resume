@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>flex布局</title>
+	<style type="text/css">
+		*{margin: 0px; padding:0px;}
+		.main{padding: 20px;}
+		.flex-container{
+			display: flex;
+			justify-content: space-between;
+			align-content: space-between;
+			align-items: center;
+			flex-wrap:wrap;
+		}
+		.items{
+			border: 1px solid #f00;
+			width: 150px;
+			margin-bottom: 20px;
+		}
+		.item1{		
+			height: 120px;
+		}
+		.item2{
+			height: 100px;
+		}
+		.item3{
+			height: 40px;
+		}
+		.item4{
+			border-color: #0f0;
+			height: 200px;
+		}
+		@media (max-width:640px ){
+			.flex-container{
+				align-items: flex-start;
+			}
+			.item4{
+				order:-1;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="main">
+		<div class="flex-container">
+			<div class="items item1"></div>
+			<div class="items item2"></div>
+			<div class="items item3"></div>
+			<div class="items item4"></div>
+		</div>
+	</div>	
+</body>
+</html>

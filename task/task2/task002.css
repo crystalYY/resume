@@ -1,0 +1,186 @@
+*{
+	margin: 0px;
+	padding: 0px;
+	font-family: 'microsoft yahei';
+}
+body{
+	background-color: #DEDEDE;
+}
+/* commen*/
+.author,.time{
+	color: #866B74;
+	line-height: 40px;
+}
+.lasttr{
+	background-color: #CCCCCC;
+}
+.init{
+	padding:30px 20px;
+	background-color: white;
+	margin-bottom: 20px;
+	overflow: hidden;
+	border-left: 1px solid #ccc;
+	border-top:1px solid #ccc;
+	border-right: 2px solid #828282;
+	border-bottom: 2px solid #828282;
+}
+h2{
+	line-height: 60px;
+}
+h4{
+	line-height: 40px;
+}
+p,dd{
+	line-height: 26px;
+}
+a:hover{
+	color: #80716A;
+}
+/*contain*/
+header{
+	height: 60px;
+	width: 100%;
+	background-color: #333333;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+header h1{
+	float: left;
+	margin-left: 35px;
+	width: 130px; 
+	height: 60px;
+	line-height: 60px;
+}
+header h1 img{
+	width: 120px;
+	height: 60px;
+}
+header ul{
+	float: right;
+	color: #040404;
+	font-style-position:inside;
+	margin-right: 30px;
+}
+header ul li{
+	float: left;
+	margin-left: 30px;
+	line-height: 60px;
+}
+header ul li a{
+	color: white;
+	text-decoration: none;
+}
+/*contain*/
+.contain{
+	padding-left: 20px;
+	padding-right: 20px;
+}
+/*artical1*/
+.contain .artical1 h4{
+	color: #727071;
+}
+.contain dl{
+	margin-left: 20px;
+}
+
+/*picture*/
+
+.contain .picture dd{
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+.contain .picture dd span{
+	border:1px solid #CBCBCB;
+	padding: 10px;
+	overflow: hidden;
+	display: inline-block;
+}
+.contain .picture dd span img{
+	width: 100%;
+	height: 100%;
+	margin-top: 10px;
+ }
+/*arical2*/
+.contain .artical2 ol{
+	margin: 10px 20px 20px 40px;
+	font-weight: bold;
+}
+.contain table{
+	width: 100%;
+	text-align: left;
+}
+.contain table caption{
+	text-align: left;
+}
+.contain table th{
+	background-color: #333333;
+	color: white;
+	padding: 5px;
+}
+.contain table td{
+	border-color:#CCCCCC;
+	padding: 5px;
+}
+/*sidebar*/
+.sidebar{
+	margin-left: 20px;
+	margin-right: 30px;
+}
+.sidebar h2{
+	height: 40px;
+	border-left: 5px solid #ccc;
+	line-height: 40px;
+	padding-left:10px;
+}
+.sidebar .mail{
+	margin-left: 280px;
+	margin-top: 20px;
+}
+.sidebar .mail label{
+	line-height: 30px;
+}
+.sidebar .mail p{
+	line-height: 60px;
+}
+#mailaddressError{
+	margin-bottom: 10px;
+}
+#inputPassword1{
+	margin-left: 32px;
+}
+.sidebar .mail .Error{
+	margin-left: 132px;
+	color: #A0A6B6;
+}
+.sidebar .baseinformation{
+	margin-left: 362px;
+	margin-bottom: 15px;
+	overflow: hidden;
+}
+.sidebar .baseinformation span{
+	line-height: 40px;
+}	
+.sidebar .baseinformation textarea{
+	width: 70%;
+	height: 200px;
+	float: right;
+	margin-right: 20%;
+	margin-top: 10px;
+}
+.sidebar button{
+	clear: both;
+	width: 100%;
+	height: 40px;
+	background-color: #3355D0;
+	border-radius: 5px;
+	border: none;
+	font-weight: bold;
+}
+footer{
+	width: 100%;
+	background-color: #000000;
+	color: white;
+	text-align: center;
+	padding: 30px 0 30px 0;
+	font-weight: bold;
+}
