@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+  </head>
+<body>
+
+  <h3>污染城市列表</h3>
+  <ul id="aqi-list">
+<!--   
+    <li>第一名：福州（样例），10</li>
+  	<li>第二名：福州（样例），10</li> -->
+  </ul>
+
+<script type="text/javascript">
+
+var aqiData = [
+  ["北京", 90],
+  ["上海", 50],
+  ["福州", 10],
+  ["广州", 50],
+  ["成都", 90],
+  ["西安", 100],["西安", 90],["西安", 98],["西安", 100],["西安", 100],["西安", 100],["西安", 100],["西安", 100],["西安", 100],["西安", 100],["西安", 70],["西安", 90],["西安", 98],["西安", 100],["西安", 100],["西安", 100],["西安", 100],["西安", 90],["西安", 98],["西安", 100],["西安", 100],["西安", 100],["西安", 100]
+];
+
+(function () {
+
+  /*
+  在注释下方编写代码
+  遍历读取aqiData中各个城市的数据
+  将空气质量指数大于60的城市显示到aqi-list的列表中
+  */
+  var aqi=document.getElementById('aqi-list');
+  var chineseNum=[ "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" ];
+  //var alabo=['0','1','2','3','4','5','6','7','8','9'];
+  var alabo='0123456789';
+  var aqisort=aqiData.filter(function(item){
+    if(item[1]>60){
+      return item;
+    }
+  });
+  aqisort.sort(function(a,b){
+    return b[1]-a[1];
+  });
+  for(var i=0;i<aqisort.length;i++){
+    var  paiming='';
+      if(i+1<10){
+        paiming=chineseNum[i+1];
+      }else{
+        var istr=(i+1).toString();
+        var istrArray=istr.split('');
+        if(istrArray.length==2){
+          if(parseInt(istrArray[1])==0&&parseInt(istrArray[0])!=1){
+            paiming+=chineseNum[alabo.indexOf(istrArray[0])]+'十';
+          }
+          else if(parseInt(istrArray[0])==1){
+            if(parseInt(istrArray[1])==0){
+              paiming='十';
+            }
+            else{
+              paiming='十'+chineseNum[alabo.indexOf(istrArray[1])];
+            }
+          }
+          else{
+          paiming+=chineseNum[alabo.indexOf(istrArray[0])]+'十'+chineseNum[alabo.indexOf(istrArray[1])];
+          }
+        }       
+        //paiming=(i+1);     
+      }
+      var oli=document.createElement('li');
+      var oliText=document.createTextNode('第'+paiming+'名：'+aqisort[i][0]+', '+aqisort[i][1]);
+      oli.appendChild(oliText);
+      aqi.appendChild(oli);
+  }
+})();
+
+</script>
+</body>
+</html>
