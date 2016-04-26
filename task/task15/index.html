@@ -37,14 +37,13 @@
 function getData() {
 	var data=[];
 	var source=document.getElementById('source').getElementsByTagName('li');
-	var omatch=/(.+)空气质量：<b>(\d+)<\/b>/;
-	for(var i=0;i<source.length;i++){//可优化，不用循环
+	var omatch=/(.+)空气质量：<b>(\d+)<\/b>/;//用捕获组匹配城市和数字
+	for(var i=0;i<source.length;i++){
 		data[i]=[];
 		var matchs=omatch.exec(source[i].innerHTML);
 		data[i][0]=matchs[1].toString();
 		data[i][1]=parseInt(matchs[2]);
 	}
-
 
   return data;
 
@@ -68,7 +67,7 @@ function sortAqiData(data) {
  */
 function render(data) {
 	var resort=document.getElementById('resort');
-	var chineseNum=["一", "二", "三", "四", "五", "六", "七", "八", "九" ,"十"];
+	var chineseNum=["一", "二", "三", "四", "五", "六", "七", "八", "九" ,"十"];//有局限，只可使用前十
 	for(var i=0;i<data.length;i++){
 		var oli=document.createElement('li');
 		oli.innerHTML='第'+chineseNum[i]+'名：'+data[i][0]+'空气质量：'+'<b>'+data[i][1]+'</b>';

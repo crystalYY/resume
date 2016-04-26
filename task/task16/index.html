@@ -1,0 +1,126 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+    <style type="text/css">
+      span{color: red;margin-left: 10px;}
+      table{margin-top: 20px; margin-left: 20px;}
+      table td{border: 1px solid #000; padding: 5px;}
+    </style>
+    <script src="index.js"></script>
+
+  </head>
+<body>
+
+  <div>
+    <label>城市名称：<input id="aqi-city-input" type="text"><span id="citySpan"></span></label><br>
+    <label>空气质量指数：<input id="aqi-value-input" type="text"><span id="valueSpan"></span></label><br>
+    <button id="add-btn">确认添加</button>
+  </div>
+  <table id="aqi-table" cellSpacing='0';>
+  <!-- 
+    <tr>
+      <td>城市</td><td>空气质量</td><td>操作</td>
+    </tr>
+    <tr>
+      <td>北京</td><td>90</td><td><button>删除</button></td>
+    </tr>
+    <tr>
+      <td>北京</td><td>90</td><td><button>删除</button></td>
+    </tr>
+   -->
+  </table>
+  <script type="text/javascript">
+    function getTarget(e){
+        var e=e||window.event;
+        return e.target;
+    }
+    //匹配汉字或英文以及空格
+    var cityName=/^[\u4E00-\u9FA5\uF900-\uFA2DA-Za-z\s]+$/;
+    //匹配数字以及空格
+    var airNum=/^[0-9\s]+$/;
+    //console.log(cityName.test('ae'));
+    var btn=document.getElementById('add-btn');
+     var cityInput=document.getElementById('aqi-city-input');
+    var valueInput=document.getElementById('aqi-value-input');
+    var citySpan=document.getElementById('citySpan');
+    var valueSpan=document.getElementById('valueSpan');
+    btn.onclick=function(){
+      //判断输入内容格式是否符合要求
+      if(cityName.test(cityInput.value)&&!/^[\s]+$/.test(cityInput.value)){       
+        cityvalue=cityInput.value;
+      }
+      else{
+        citySpan.innerHTML='只能包含中文或英文,不能为空';
+        cityvalue=null;
+      }
+      if(airNum.test(valueInput.value)&&!/^[\s]+$/.test(valueInput.value)){
+         airvalue=valueInput.value;
+      }
+      else{
+       valueSpan.innerHTML='只能为数字，不能为空';
+       airvalue=null;
+      }
+      //添加数据
+      var otable=document.getElementById('aqi-table');
+      var otrs=otable.getElementsByTagName('tr');
+      if(cityvalue&&airvalue){
+        cityvalue=cityvalue.replace(/\s/g,'');
+        airvalue=airvalue.replace(/\s/g,'');
+        if(otrs.length==0){
+          var otr1=document.createElement('tr');
+          var otr2=document.createElement('tr');
+          otr1.innerHTML='<tr><td>城市</td><td>空气质量</td><td>操作</td></tr>';
+          otr2.innerHTML='<tr><td>'+cityvalue+'</td><td>'+airvalue+'</td><td><button>删除</button></td></tr>';
+          otable.appendChild(otr1);
+          otable.appendChild(otr2);
+        }
+        else{
+          //判断是否重复添加
+          if(otrs[otrs.length-1].getElementsByTagName('td')[0].innerHTML!=cityvalue){
+            var otr=document.createElement('tr');
+            otr.innerHTML='<tr><td>'+cityvalue+'</td><td>'+airvalue+'</td><td><button>删除</button></td></tr>';
+            otable.appendChild(otr);
+          }
+          
+        }
+      }
+       //为删除按钮添加事件,通过事件代理给table添加点击事件
+      var aqiTable=document.getElementById('aqi-table');
+      aqiTable.onclick=function(e){
+        var itar=getTarget(e);
+        if(itar.nodeName='button'){
+           var otabletr=aqiTable.getElementsByTagName('tr');
+           if(otabletr.length==2){
+            aqiTable.innerHTML='';
+           }
+           else{
+            aqiTable.removeChild(itar.parentNode.parentNode);//注意文档结构，tr是button父级的父级
+           }
+        }
+      };
+      /*
+      var otabletr=aqiTable.getElementsByTagName('tr');
+      if(otabletr.length>0){
+        for(var i=1;i<otabletr.length;i++){
+            otabletr.index=i;
+            otabletr[i].getElementsByTagName('td')[2].onclick=function(){
+              if(otabletr.length==2){
+                otable.innerHTML='';
+              }
+              else{
+                otable.removeChild(this.parentNode);
+              }
+            };
+        }
+      }
+       */
+    };
+    //文本框获取焦点时错误提示信息消失
+    cityInput.onfocus=valueInput.onfocus=function(){
+      this.parentNode.getElementsByTagName('span')[0].innerHTML='';
+    };
+  </script>
+</body>
+</html>
