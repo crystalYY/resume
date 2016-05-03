@@ -50,26 +50,37 @@
 </head>
 <body>
 	
-	<ul>
+	<ul id="tasks">
 		<p>背景为灰色的暂无内容</p>
-		<li><a href="task/task1/index.html">任务一</a></li>
-		<li><a href="task/task2/index.html">任务二</a></li>
-		<li><a href="task/task3/index.html">任务三</a></li>
-		<li><a href="task/task4/index.html">任务四</a></li>
-		<li><a href="task/task5/index.html">任务五</a></li>
-		<li><a href="task/task6/index.html">任务六</a></li>
-		<li class="nothing"><a href="task/task7/index.html">任务七</a></li>
-		<li><a href="task/task8/index.html">任务八</a></li>
-		<li class="nothing"><a href="task/task9/index.html">任务九</a></li>
-		<li><a href="task/task10/index.html">任务十</a></li>
-		<li><a href="task/task11/index.html">任务十一</a></li>
-		<li class="nothing"><a href="task/task12/index.html">任务十二</a></li>
-		<li><a href="task/task13/index.html">任务十三</a></li>
-		<li><a href="task/task14/index.html">任务十四</a></li>
-		<li><a href="task/task15/index.html">任务十五</a></li>
-		<li><a href="task/task16/index.html">任务十六</a></li>
-		<li class="nothing"><a href="task/task17/index.html">任务十七</a></li>
+		<li><a href="task/task1/index.html" title="html基本标签熟悉">任务一</a></li>
+		<li><a href="task/task2/index.html" title="基本布局">任务二</a></li>
+		<li><a href="task/task3/index.html" title="双飞翼布局">任务三</a></li>
+		<li><a href="task/task4/index.html" title="浏览器居中">任务四</a></li>
+		<li><a href="task/task5/index.html" title="侧栏固定的两列布局">任务五</a></li>
+		<li><a href="task/task6/index.html" title="通过html/css 模拟报纸排版">任务六</a></li>
+		<li><a href="task/task8/index.html" title="响应式页面">任务八</a></li>
+		<li><a href="task/task10/index.html" title="flex布局">任务十</a></li>
+		<li><a href="task/task11/index.html" title="简单地表单验证">任务十一</a></li>
+		<li><a href="task/task13/index.html" title="css3应用">任务十三</a></li>
+		<li><a href="task/task14/index.html" title="排序">任务十四</a></li>
+		<li><a href="task/task15/index.html" title="获取数据并排序">任务十五</a></li>
+		<li><a href="task/task16/index.html" title="表单验证">任务十六</a></li>
+		<li><a href="task/task17/index.html" title="一个完整的交互页面，用DOM生成柱状图">任务十七</a></li>
 		<li class="nothing"><a href="task/task18/index.html">任务十八</a></li>
 	</ul>
+	<script type="text/javascript">
+		var tasks=document.getElementById('tasks');
+		var oli=tasks.getElementsByTagName('li');
+		for(var i=0;i<oli.length;i++){
+			var labels='';
+			oli[i].onmouseover=function(){
+				labels=this.getElementsByTagName('a')[0].innerHTML;
+				this.getElementsByTagName('a')[0].innerHTML=this.getElementsByTagName('a')[0].title;
+			};
+			oli[i].onmouseout=function(){
+				this.getElementsByTagName('a')[0].innerHTML=labels;
+			}
+		}
+	</script>
 </body>
 </html>

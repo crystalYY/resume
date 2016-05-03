@@ -1,0 +1,57 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>IFE JavaScript Task 01</title>
+    <style type="text/css">
+      h2{margin: 20px auto; width: 190px;}
+      fieldset{
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+      }
+      fieldset legend{
+        font-family: "幼圆";
+      }
+      fieldset select{
+        width:100px;
+      }
+      .showDetial{
+        text-align: center;
+        padding: 10px;
+        display: none;
+        margin-bottom: 20px;
+        color: #90EE90;
+        font-family: '幼圆';
+        font-size: 18px;
+      }
+      .aqi-chart-wrap{
+        border: 2px solid #467500;
+        border-radius: 20px;
+        display: none;
+        text-align: center;
+      }
+    </style>
+    
+  </head>
+<body>
+  <h2>各城市雾霾情况</h2>
+  <fieldset id="form-gra-time">
+    <legend>请选择日期粒度：</legend>
+    <label>日<input name="gra-time" value="day" type="radio" checked="checked"></label>
+    <label>周<input name="gra-time" value="week" type="radio"></label>
+    <label>月<input name="gra-time" value="month" type="radio"></label>
+  </fieldset>
+
+  <fieldset>
+    <legend>请选择查看的城市：</legend>
+    <select id="city-select">
+      <option value='choose'>--请选择城市--</option>
+    </select>
+  </fieldset>
+  <div id='showDetial' class="showDetial"></div>
+  <div class="aqi-chart-wrap" id="aqiChart">
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
