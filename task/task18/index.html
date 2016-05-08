@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>模仿队列操作</title>
+	<style type="text/css">
+		form{
+
+			text-align: center;
+		}
+		form fieldset{
+			position: relative;
+			padding: 10px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+		}
+		form input{
+			width:260px;
+			height: 30px;
+			margin-bottom: 10px;
+		}
+		form span{
+			display: none;
+			color:red;
+			font-size: 12px;
+			position: absolute;
+			right: 440px;
+			top: 36px;
+		}
+		button{
+			background-color: #483D8B;
+			color: #FFEFD5;
+			border-radius: 5px;
+			padding: 5px;
+			margin-right: 20px;
+			cursor: pointer;
+		}
+		.nums span{
+			padding: 5px;
+			margin-left: 10px;
+			background-color: #3A006F;
+			border: 2px solid #C0C0C0;
+			color: #E0E0E0;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<fieldset>
+			<legend>插入</legend>
+			<input type="text" id="inputNum" placeholder="请输入你想插入的数字" /><span id="notice1">请输入数字！</span><span id="notice2">不能为空！</span><br/>
+			<button id="leftInput">左侧入</button>
+			<button id="rightInput">右侧入</button>
+		</fieldset>
+		<fieldset>
+			<legend>移出</legend>
+			<button id="leftOutput">左侧出</button>
+			<button id="rightOutput">右侧出</button>
+		</fieldset>
+		
+	</form>
+	<div id="nums" class="nums">
+	</div>
+	<script type="text/javascript">
+		//获取ID
+		function $(idname){
+			return document.getElementById(idname);
+		}
+
+		var leftInput=$('leftInput');
+		var rightInput=$('rightInput');
+		var leftOutput=$('leftOutput');
+		var rightOutput=$('rightOutput');
+		var notice1=$('notice1');
+		var notice2=$('notice2');
+		var inputNum=$('inputNum');
+		//设置一个标志量来检测用户输入是否已经合法
+		var now=false;
+		//存放数字的数组
+		var nowNums=[];
+		//事件绑定函数
+		function addListener(elem,ev,fun){
+			if(elem.addEventListener){
+				elem.addEventListener(ev,fun,false);
+			}else if(elem.attachEvent){
+				elem.attachEvent('on'+ev,fun);
+			}else{
+				elem['on'+ev]=fun;
+			}
+		}
+		//阻止默认行为
+		function stopEvent(ev){
+			var e=ev||window.event;
+			if(e.preventDefault){
+			    e.preventDefault();//FF等阻止DOM节点默认行为，这里是提交表单的行为
+			    e.stopPropagation();
+			}else{
+			    e.cancelBubble = true;//IE阻止事件冒泡
+			    e.returnValue = false;//IE阻止DOM节点默认行为，这里是提交表单的行为
+			}
+		}
+		//插入函数
+		function insertNum(direction){
+			var nums=$('nums');
+			if(now){
+				var inputValue=inputNum.value.replace(/\s/g,'');
+				nowNums.unshift(inputValue);
+				var spanText=document.createElement('span');
+				spanText.innerHTML=inputValue;
+				var spans=nums.getElementsByTagName('span');
+				if(direction=='left'){
+					if(spans.length==0){
+						nums.appendChild(spanText);
+					}
+					else{
+						nums.insertBefore(spanText,spans[0]);
+					}
+				}else{
+					nums.appendChild(spanText);
+				}
+			}
+		}
+		//删除函数
+		function delNum(direction){
+			var delSpans=$('nums').getElementsByTagName('span');
+			if(delSpans.length<=0){
+				alert('队列里暂无元素！');
+			}else if(direction=='left'){
+				alert(nowNums.shift());
+				$('nums').removeChild(delSpans[0]);
+			}else{
+				alert(nowNums.pop());
+				$('nums').removeChild(nums.lastChild);
+			}
+		}
+		//验证是否是数字的正则表达式
+		var isNum=/^[0-9\s]+$/g;
+		//验证是否全是空格
+		var isSpace=/^\s*$/g;
+		//当输入文本框失去焦点时判断是否输入的为合法数字，若不是给出提示信息
+		addListener(inputNum,'blur',function(){
+			isNum.lastIndex=0;
+			if(isSpace.test(inputNum.value)){
+				notice2.style.display='block';
+				now=false;
+			}else if(!isNum.test(inputNum.value)){
+				notice1.style.display='block';
+				now=false;
+			}else{
+				now=true;
+			}
+		});
+		//失去焦点时提示信息消失
+		addListener(inputNum,'focus',function(){
+			notice1.style.display='none';
+			notice2.style.display='none';
+		});
+		//点击左侧插入
+		addListener(leftInput,'click',function(ev){
+			stopEvent(ev);
+			insertNum('left');
+		});
+		//点击右侧插入
+		addListener(rightInput,'click',function(ev){
+			stopEvent(ev);
+			insertNum('right');	
+		});
+		//点击删除第一个元素
+		addListener(leftOutput,'click',function(ev){
+			stopEvent(ev);
+			delNum('left');
+		});
+		//点击删除最后一个元素
+		addListener(rightOutput,'click',function(ev){
+			stopEvent(ev);
+			delNum('right');
+		});
+	</script>
+</body>
+</html>
