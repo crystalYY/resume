@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>模糊匹配及正则表达式</title>
+	<style type="text/css">
+		form{
+
+			text-align: center;
+		}
+		form fieldset{
+			position: relative;
+			padding: 10px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+		}
+		form textarea{
+			width:300px;
+			height: 200px;
+			margin-bottom: 10px;
+			resize: none;
+		}
+		form input{
+			width:300px;
+			height: 30px;
+			margin-bottom: 10px;
+		}
+		button{
+			background-color: #483D8B;
+			color: #FFEFD5;
+			border-radius: 5px;
+			padding: 5px;
+			margin-right: 20px;
+			cursor: pointer;
+		}
+		.contents span{
+			padding: 5px;
+			margin-left: 10px;
+			background-color: #3A006F;
+			border: 2px solid #C0C0C0;
+			color: #E0E0E0;
+		}
+		.active{
+			background-color: red;
+		}
+		b{
+			font-weight: normal;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<fieldset>
+			<legend>插入</legend>
+			<textarea id="text" placeholder="请输入内容" autofocus></textarea><br/>
+			<button id="leftInput">左侧入</button>
+			<button id="rightInput">右侧入</button>
+		</fieldset>
+		<fieldset>
+			<legend>移出</legend>
+			<button id="leftOutput">左侧出</button>
+			<button id="rightOutput">右侧出</button>
+		</fieldset>
+		<fieldset>
+			<legend>模糊匹配</legend>
+			<input type="text" placeholder="请输入你想要匹配的内容" id='inputText'/></br>
+			<button id="match">匹配</button>
+		</fieldset>
+		
+	</form>
+	<div id="contents" class="contents">
+	</div>
+	<script type="text/javascript">
+		//获取ID
+		function $(idname){
+			return document.getElementById(idname);
+		}
+		//获取所需要的变量
+		var leftInput=$('leftInput');
+		var rightInput=$('rightInput');
+		var leftOutput=$('leftOutput');
+		var rightOutput=$('rightOutput');
+		var omatch=$('match');
+		//存放内容的数组
+		var nowText=[];
+		//事件绑定函数
+		function addListener(elem,ev,fun){
+			if(elem.addEventListener){
+				elem.addEventListener(ev,fun,false);
+			}else if(elem.attachEvent){
+				elem.attachEvent('on'+ev,fun);
+			}else{
+				elem['on'+ev]=fun;
+			}
+		}
+		//阻止默认行为
+		function stopEvent(ev){
+			var e=ev||window.event;
+			if(e.preventDefault){
+			    e.preventDefault();//FF等阻止DOM节点默认行为，这里是提交表单的行为
+			    e.stopPropagation();
+			}else{
+			    e.cancelBubble = true;//IE阻止事件冒泡
+			    e.returnValue = false;//IE阻止DOM节点默认行为，这里是提交表单的行为
+			}
+		}
+		//插入函数
+		function insertNum(direction){
+			var contents=$('contents');
+			var textValue=$('text').value.trim().split(/[^0-9a-zA-Z\u4e00-\u9fa5]+/).filter(function(item){
+				if(item!=null&&item.length>0){//判断当前的数组项是否为空
+					return true;
+				}else{
+					return false;
+				}
+				
+			});
+			//console.log(textValue);
+			for(var i=0;i<textValue.length;i++){
+				nowText.unshift(textValue[i]);
+				var spanText=document.createElement('span');
+				spanText.innerHTML=textValue[i];
+				var spans=contents.getElementsByTagName('span');
+				if(direction=='left'){
+					if(spans.length==0){
+						contents.appendChild(spanText);
+					}
+					else{
+						contents.insertBefore(spanText,spans[0]);
+					}
+				}else{
+					contents.appendChild(spanText);
+				}			
+			}			
+		}
+		//删除函数
+		function delNum(direction){
+			var delSpans=$('contents').getElementsByTagName('span');
+			if(delSpans.length<=0){
+				alert('队列里暂无元素！');
+			}else if(direction=='left'){
+				nowText.shift();
+				$('contents').removeChild(delSpans[0]);
+			}else{
+				nowText.pop();
+				$('contents').removeChild(contents.lastChild);
+			}
+		}
+		//匹配函数(自己的思路，虽然可以实现，但是代码不够优化，太复杂)
+		/*
+		function matchs(matchStr){
+			var returnSpan1=/<b class="active">/g;
+			var returnSpan2=/<\/b>/g;
+			var spanTexts=$('contents').getElementsByTagName('span');
+			var matchExp=new RegExp(matchStr,'g');
+			if(spanTexts.length<=0){
+				alert('队列里暂无元素！');
+			}else{
+				for(var i=0;i<spanTexts.length;i++){
+					//清除上一次匹配内容
+					spanTexts[i].innerHTML=spanTexts[i].innerHTML.replace(returnSpan1,'').replace(returnSpan2,'');
+					//console.log(returnSpan.test(spanTexts[i].innerHTML));
+					var matchStrs=spanTexts[i].innerHTML.match(matchExp);
+					if(matchStrs!=null){
+						for(var j=0;j<matchStrs.length;j++){
+							spanTexts[i].innerHTML=spanTexts[i].innerHTML.replace(matchStrs[j],"<b class='active'>"+matchStrs[j]+"</b>");
+						}
+					}
+					
+				}
+			}
+		}
+		*/
+
+		/*
+		参考了别人的代码改进后的匹配函数
+		具体实现思想：存在一个不变的基础数组（nowText)用来存放所有数据，每次查找以基础数组为依据遍历每一项，并匹配需要匹配的内容，若可以匹配到则替换为相对应的html代码
+		*/
+		function matchs(str){
+			if(str&&str.length!=0){
+				$('contents').innerHTML=nowText.map(function(item){
+					item=item.replace(new RegExp(str,'g'),"<b class='active'>"+str+"</b>");
+					return "<span>"+item+"</span>";
+				}).join('');//把数组转换为字符串再赋值给contents
+			}
+		}
+		//点击左侧插入
+		addListener(leftInput,'click',function(ev){
+			stopEvent(ev);
+			insertNum('left');
+		});
+		//点击右侧插入
+		addListener(rightInput,'click',function(ev){
+			stopEvent(ev);
+			insertNum('right');	
+		});
+		//点击删除第一个元素
+		addListener(leftOutput,'click',function(ev){
+			stopEvent(ev);
+			delNum('left');
+		});
+		//点击删除最后一个元素
+		addListener(rightOutput,'click',function(ev){
+			stopEvent(ev);
+			delNum('right');
+		});
+		//点击匹配元素
+		addListener(omatch,'click',function(ev){
+			stopEvent(ev);
+			var matchStr=$('inputText').value.toString();
+			matchs(matchStr);
+		})
+	</script>
+</body>
+</html>

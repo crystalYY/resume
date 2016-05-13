@@ -68,6 +68,7 @@
 	<div id="nums" class="nums">
 	</div>
 	<script type="text/javascript">
+		/*把每一步排序过后的数字返回，然后用渲染函数输出*/
 		//获取ID
 		function $(idname){
 			return document.getElementById(idname);
@@ -283,7 +284,7 @@
 			stopEvent(ev);
 			insertionSort.timer=setInterval(function(){
 				render(insertionSort);
-			},30);
+			},100);
 		});
 	</script>
 </body>
