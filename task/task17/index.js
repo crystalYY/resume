@@ -49,7 +49,7 @@ var pageState = {
 }
 function getTarget(e){
   var ev=e||window.event;
-  return ev.target||e.srcElement;
+  return ev.target||ev.srcElement;
 }
 //兼容的事件监听函数
 function addListener(obj,ev,fun){

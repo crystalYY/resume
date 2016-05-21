@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>tag输入及兴趣爱好输入</title>
+	<style type="text/css">
+		*{margin: 0px; padding: 0px;}
+		.tag,.hobby{
+			margin-top: 20px;
+			width: 50%;
+			float: left;
+		}
+		h3{
+			line-height: 30px;
+			margin-left: 20px;
+			font-family: '楷体';
+		}
+		.inputTag{width: 200px; height: 30px; border-radius: 10px; margin: 20px;}
+		.inputTag:focus{border:2px solid #EA0000;  outline: none;}
+		.inputTags{
+			margin:0px 20px 20px 20px;
+		}
+		p{
+			display: inline-block;
+			vertical-align: middle;
+			text-align: center;
+			margin-right: 10px;
+			margin-top: 10px;
+			width: 80px;
+			min-height: 50px;
+			border-radius: 10px;
+			background-color: #000000;
+			word-wrap: break-word;
+			cursor: pointer;
+			font-family: '幼圆';
+			color: #fff;
+			padding: 5px;
+		}
+		textarea{
+			margin: 20px 20px 10px 20px;
+			border-radius: 10px;
+			border-width: 2px;
+			resize: none;
+			width: 300px;
+			height: 200px;
+		}
+		textarea:focus{
+			border-radius: 10px;
+			border:2px solid #EA0000;
+			outline: none;
+		}
+		.btn{
+			margin: 0px 20px 20px 20px;
+			width: 100px;
+			height: 30px;
+			border-radius: 10px;
+			border: 2px solid #000;
+			color:	#000;
+			background-color: #fff;
+			cursor: pointer;
+			outline: none;
+			font-family: '楷体';
+		}
+		.hobbyTags{
+			margin: 0px 20px 20px 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="tag">
+		<h3>使用逗号，空格，回车进行tag输入</h3>
+		<input type='text' placeholder="请输入标签" id="inputTag" class="inputTag" />
+		<div id="inputTags" class="inputTags">		
+		</div>
+	</div>
+	<div class="hobby">
+		<h3>一次性添加多个兴趣，可以通过用回车，逗号（全角半角均可），顿号，空格（全角半角、Tab等均可）等符号作为间隔。</h3>
+		<textarea id="hobbies"></textarea><br>
+		<input type="button" id="btn" class="btn" value="确认兴趣爱好">
+		<div id="hobbyTags" class="hobbyTags">
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+		//存放标签内容的全局变量
+		var tagValues=[];
+		var hobbyVal=[];//现存的标签内容数组
+		/***
+			javascript高级选择器
+
+		***/
+		//选择一个元素
+		function $(selectorName){
+			return document.querySelector(selectorName);
+		}
+		//选择一组元素
+		function $$(selectorName){
+			return document.querySelectorAll(selectorName);
+		}
+		/****
+			阻止默认行为
+		****/
+		function stopEvent(ev){
+			var e=ev||window.event;
+			if(e.preventDefault){
+			    e.preventDefault();//FF等阻止DOM节点默认行为
+			    e.stopPropagation();
+			}else{
+			    e.cancelBubble = true;//IE阻止事件冒泡
+			    e.returnValue = false;//IE阻止DOM节点默认行为
+			}
+		}
+		/***
+			去重
+		***/
+		String.prototype.trim=function(){
+			return this.replace(/(^\s*)|(\s*$)/g,'');
+		}
+		/***
+			判断匹配数组中每一项
+		***/
+		Array.prototype.matchArray=function(str){
+			for(var i=0;i<this.length;i++){
+				if(str==this[i].toString()){
+					return false;
+				}
+			}
+			return true;
+		}
+		/***
+			兼容的获取当前对象
+		***/
+		function getTarget(e){
+			var ev=e||window.event;
+			return ev.target||ev.srcElement;
+		}
+		/***
+			兼容的事件监听器
+		***/
+		function addListener(obj,ev,fun){
+			if(obj.addEventListener){
+				obj.addEventListener(ev,fun,false);
+			}else if(obj.attachEvent){
+				obj.attachEvent('on'+ev,fun);
+			}else{
+				obj['on'+ev]=fun;
+			}
+		}
+		/***
+			实现具体功能的函数
+		***/
+
+		//tag输入  108 13 32 188
+		//标签生成
+		function tagInput(e,obj){
+			var ev=e||window.event;
+			if(e.keyCode==13||e.keyCode==32||e.keyCode==108||e.keyCode==188){
+				stopEvent(e);//阻止默认行为
+				var isSpace=/\S+/g;
+				if(obj.className=='inputTags'){
+					if(tagValues.length==10){
+						tagValues.shift();
+						$('#inputTags').removeChild($('#inputTags').children[0]);
+					}
+					var inputTag=$('#inputTag');
+					var tagValue=inputTag.value.trim();
+					inputTag.value='';
+					if(isSpace.test(tagValue.toString())&&tagValues.matchArray(tagValue)){
+						var pElem=document.createElement('p');
+						var pElemText=document.createTextNode(tagValue);
+						pElem.appendChild(pElemText);
+						obj.appendChild(pElem);
+						tagValues.push(tagValue);
+					}						
+					
+				}
+			}
+			if(obj.className=='hobbyTags'){
+				var splitReg=/[^0-9a-zA-Z\u4E00-\u9FA5\uF900-\uFA2D]+/g;
+				var hobbyValues=$('#hobbies').value.trim().split(splitReg);				
+				//最后有可能存在一个没有内容的数组项,删除掉
+				if(hobbyValues[hobbyValues.length-1]==''){
+					hobbyValues.pop();
+				}
+				//console.log(hobbyValues);
+				for(var i=0;i<hobbyValues.length;i++){
+					if(hobbyVal.matchArray(hobbyValues[i].toString())){//标签不能重复
+						if(hobbyVal.length==10){
+							hobbyVal.shift();
+							obj.removeChild(obj.children[0]);
+						}
+						var pElem=document.createElement('p');
+						var pElemText=document.createTextNode(hobbyValues[i]);
+						pElem.appendChild(pElemText);
+						obj.appendChild(pElem);
+						hobbyVal.push(hobbyValues[i]);
+					}
+					
+				}
+				
+			}
+			
+		}
+		//鼠标移入显示删除字样
+		function mouseoverRemove(e){
+			var tags=$$('p');
+			var itar=getTarget(e);
+			if(itar.nodeName=='P'){
+				for(var i=0, len=tags.length;i<len;i++){
+					tags[i].innerHTML=tags[i].innerHTML.toString().replace('删除：','');				
+				}
+				itar.innerHTML='删除：'+itar.innerHTML;	
+			}		
+		}
+		//鼠标移出恢复原状
+
+		function mouseout(){
+			var tags=$$('p');
+			for(var i=0, len=tags.length;i<len;i++){
+				tags[i].innerHTML=tags[i].innerHTML.toString().replace('删除：','');				
+			}
+		}
+
+		//删除tag
+		function deleteTag(e,itarget){
+			var inputTagP=itarget.getElementsByTagName('p');
+			//为了方便更新数组中的信息，为每个节点添加一个index
+			for(var i=0;i<inputTagP.length;i++){
+				inputTagP[i].index=i;
+			}
+			var itar=getTarget(e);
+			if(itarget.className=='inputTags'){
+				tagValues.splice(itar.index,1);
+			}
+			else{
+				hobbyVal.splice(itar.index,1);
+			}
+			//console.log(itar.index);
+			itarget.removeChild(itar);
+		}
+		/***
+			调用实现具体功能的函数
+		***/
+		//tag输入
+		addListener($('#inputTag'),'keydown',function(e){
+			tagInput(e,$('#inputTags'));
+		})
+		addListener($('#btn'),'click',function(e){
+			tagInput(e,$('#hobbyTags'));
+		})
+
+
+		//鼠标移入显示删除字样
+		addListener($('#inputTags'),'mouseover',function(e){
+			mouseoverRemove(e);
+		});
+		addListener($('#hobbyTags'),'mouseover',function(e){
+			mouseoverRemove(e);
+		})
+		//鼠标移出恢复原状
+		addListener($('#inputTags'),'mouseout',mouseout);
+		addListener($('#hobbyTags'),'mouseout',mouseout);
+		//删除tag
+		addListener($('#inputTags'),'click',function(e){
+			deleteTag(e,this);
+		});
+		addListener($('#hobbyTags'),'click',function(e){
+			deleteTag(e,this);
+		})
+	</script>
+</body>
+</html>
