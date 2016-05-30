@@ -144,10 +144,6 @@
 	//重置函数
 	function resetAll(){
 		divlist.length=0;
-		var odiv=document.getElementsByTagName('div');
-		for(var i=0,len=odiv.length;i<len;i++){
-			odiv[i].style.backgroundColor='#fff';
-		}
 	}
 	//遍历可视化
 	function changeColor(){
@@ -162,6 +158,7 @@
 			if(i==len){
 				clearInterval(timer);
 				//console.log(divlist);
+				divlist[len-1].style.backgroundColor='#fff';
 				resetAll();
 				return;
 			}
