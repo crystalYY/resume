@@ -60,8 +60,9 @@
 		</fieldset>
 		<fieldset>
 			<legend>可视化排序</legend>
-			<button id="randomProduce">随机产生</button>
+			<button id="randomProduce">随机产生</button><br><br>
 			<button id="insertionSort">插入排序</button>
+			<button id="quickSort">快速排序</button>
 		</fieldset>
 		
 	</form>
@@ -82,10 +83,12 @@
 		var notice3=$('notice3');
 		var inputNum=$('inputNum');
 		var insertionSort=$('insertionSort');
+		var oquickSort=$('quickSort');
 		/*
 			设置每种排序的定时器
 		*/
 		insertionSort.timer=null;
+		oquickSort.timer=null;
 		//设置开始排序的标志量
 		var startSort=0;
 		//var sorti=0;
@@ -183,8 +186,11 @@
 				nums.appendChild(spanNum);
 			}
 		}
+		/***
+			各类排序方法
+		***/
 		//插入排序
-		function insertion(obj){
+		function insertion(){
 			for(startSort=1;startSort<nowNums.length;startSort++){
 				var cur=nowNums[startSort];
 				for(sorti=startSort-1;sorti>=0;sorti--){				
@@ -199,27 +205,68 @@
 				return nowNums;
 			}			
 		}
-		//定时渲染函数
-		function render(obj){		
+		/**
+		快速排序
+		**/
+		//选择一个基准数字，接下来分区即比它小的放在它左边，比它大的放在它右边，重复分区直到各区间只有一个数
+		function adjustSort(low,high){
+			var cur=nowNums[low];
+			while(low<high){
+				console.log(nowNums);
+				while(low<high&&nowNums[high]>=cur){//要有等号
+					high--;
+				}
+				nowNums[low]=nowNums[high];
+				while(low<high&&nowNums[low]<=cur){
+					low++;
+				}
+				nowNums[high]=nowNums[low];
+			}
+			nowNums[low]=cur;
+			return low;
+		}
+		function quickSort(low,high){
+			if(low<high){
+				var mid=adjustSort(low,high);
+				quickSort(low,mid-1);
+				quickSort(mid+1,high);
+			}			
+		}
+
+
+
+		/*定时渲染函数*/
+
+		function render(){
+			$('nums').innerHTML='';
+			//console.log(nowNums);
+			for(var i=0;i<nowNums.length;i++){
+				var spanNum=document.createElement('span');
+				spanNum.style.height=parseInt(nowNums[i])+'px';
+				getColor(spanNum,nowNums[i]);
+				$('nums').appendChild(spanNum);
+			}
+		}
+		
+		//插入排序
+		function renderInsertion(obj){		
 			//endSort=nowNums;
+
 			nowNums=insertion();
+			
 			//判断是否清除定时器
 			//alert(endSort+'  '+sorti);
 			//alert(nowNums);
 			if(startSort<nowNums.length){
-				$('nums').innerHTML='';
-				console.log(nowNums);
-				for(var i=0;i<nowNums.length;i++){
-					var spanNum=document.createElement('span');
-					spanNum.style.height=parseInt(nowNums[i])+'px';
-					getColor(spanNum,nowNums[i]);
-					$('nums').appendChild(spanNum);
-				}
+				render();
 			}
 			else{
 				clearInterval(obj.timer);
+				startSort=0;
 			}						
 		}
+
+		
 		/*
 
 		绑定事件
@@ -282,9 +329,15 @@
 		addListener(insertionSort,'click',function(ev){
 			stopEvent(ev);
 			insertionSort.timer=setInterval(function(){
-				render(insertionSort);
+				renderInsertion(insertionSort);
 			},100);
 		});
+		//点击进行快速排序
+		addListener(oquickSort,'click',function(ev){
+			stopEvent(ev);
+			quickSort(0,nowNums.length-1);
+			render();
+		})
 	</script>
 </body>
 </html>
