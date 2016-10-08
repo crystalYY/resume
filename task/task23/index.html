@@ -187,8 +187,8 @@
 		if(!!node){
 			arr.push(node);
 			BFT(node.nextElementSibling,arr);//依次获取当前层的各个节点
-			var node=arr[BFIndex++];//获取每一层的第一个节点
-			BFT(node.firstElementChild,arr);//获取下一层的第一个节点
+			var node=arr[BFIndex++];//依次获取每一层的各个节点
+			BFT(node.firstElementChild,arr);//获取当前节点对应的下一层的第一个节点
 		}
 		return arr;
 	}
