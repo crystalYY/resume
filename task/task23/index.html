@@ -5,29 +5,35 @@
 	<title>树的深度遍历和广度遍历以及查找</title>
 	<style type="text/css">
 		*{margin: 0px;padding: 0px;}
-		form{width: 580px; margin: 30px auto; line-height: 50px;}
+		body{
+			width: 100%;
+			background-color: #000;
+		}
+		.x{
+			color: #80BDA4;
+			padding: 10px;
+			border: 3px solid #E5AC27;
+			border-radius: 10px;
+		}
+		form{width:650px; margin: 0px auto; line-height: 50px; margin-bottom: 30px;}
 		button{ 
 			padding: 5px;
 			border-radius: 10px;
-			background-color: #A52A2A;
+			background-color: #80BDA4;
 			color: #fff;
-			font-family: "楷体";
-			font-size: 14px;
-			border: 1px solid #FAFAD2;
+			font-family: "Kaiti";
+			font-size: 16px;
+			border: 1px solid #80BDA4;
 			cursor: pointer;
 			outline: none;
 		}
 		button:focus,input:focus{
-			border:2px solid #003CBD;
+			border:3px solid #F6F7BE;
 		}
-		input{width: 180px; padding: 5px; font-size: 14px; font-family: "楷体"; text-align: center; margin: 5px;}
-		p{color:#DC143C; font-family: "楷体"; line-height: 20px; text-align: right;margin-right: 130px;visibility: hidden; }
-		div{
-			padding: 10px;
-			border: 1px solid #081272;
-			border-radius: 10px;
-		}
-		.content{width: 600px; margin: 30px auto; border: none;height:350px;padding: 10px;}
+		input{width: 180px; padding: 5px; font-size: 14px; font-family: "Kaiti"; text-align: center; margin: 5px;}
+		h4{color:#BF4E28; font-family: "Kaiti"; line-height: 20px; text-align: right;margin-right: 130px;visibility: hidden; }
+		
+		.content{width: 680px; margin: 30px auto; border: none;height:350px;padding: 10px;}
 		.root{
 			width: 600px;
 			height: 340px;
@@ -70,40 +76,41 @@
 	</style>
 </head>
 <body>
+	<h3 style="text-align: center; color: #fff; line-height: 100px; padding:30px 0px; padding-bottom:80px; font-family: 'Microsoft YaHei';">算法可视化</h3>
 	<form>
 		<button id="dft">深度遍历</button>
 		<button id="bft">广度遍历</button>
 		<input type="text" placeholder="请输入想要查找的内容" id="inputText">
 		<button id="dftSeek">深度遍历查找</button>
 		<button id="bftSeek">广度遍历查找</button>
-		<p>您所查找的内容不存在！</p>
+		<h4>您所查找的内容不存在！</h4>
 	</form>
 	
-	<div class="content">
-		<div class="root" id="a">
+	<div class="content x">
+		<div class="root x" id="a">
 			生
-			<div class="child-1" id="b">
+			<div class="child-1 x" id="b">
 				命
-				<div class="child-2" id="d">
+				<div class="child-2 x" id="d">
 					长
 				</div>
-				<div class="child-2" id="e">
+				<div class="child-2 x" id="e">
 					短
-					<div class="child-3" id="h">
+					<div class="child-3 x" id="h">
 						宽
 					</div>
 				</div>
-				<div class="child-2" id="f">
+				<div class="child-2 x" id="f">
 					短
 				</div>
 			</div>
-			<div class="child-1" id="c">
+			<div class="child-1 x" id="c">
 				宽
-				<div class="child-2" id="g">
+				<div class="child-2 x" id="g">
 					长
-					<div class="child-3" id="i">
+					<div class="child-3 x" id="i">
 						窄
-						<div class="child-4" id="j">
+						<div class="child-4 x" id="j">
 							窄
 						</div>
 					</div>
@@ -112,243 +119,10 @@
 		</div>
 	</div>
 
+
 </body>
-<script type="text/javascript">
+<script type="text/javascript" src="js/algorithm.js">
 	
-	var timers=[];//存储所有定时器
-	var listArray=[];//存放遍历之后形成的序列
-	var seekArray=[];//存放遍历查找时形成的序列
-	var resultArray=[];//存放查找结果的数组
-	var seekFlag=false;//记录是否查找到相应的内容，如果找到则为true
-	var BFIndex=0;//记录广度优先遍历的深度
-	var isReturn=false;
-	var rootNode=document.getElementsByTagName('div')[1];
-	var dftBtn=document.getElementById('dft');
-	var bftBtn=document.getElementById('bft');
-	var bftSeek=document.getElementById('bftSeek');
-	var dftSeek=document.getElementById('dftSeek');
-	var inputText=document.getElementById('inputText');
-	var showError=document.getElementsByTagName('p')[0];
-	//去除.content div
-	var odiv1=document.getElementsByTagName('div');
-	var odiv=[];
-	for(var k=1;k<odiv1.length;k++){
-		odiv.push(odiv1[k]);
-	}
 
-	//阻止默认事件
-	function stopDefault(e){
-		if(e.preventDefault){
-			e.preventDefault();
-		}else{
-			e.returnValue=false;
-		}		
-	}
-	//添加事件句柄
-	function addListener(obj,ev,fun){
-		if(obj.addEventListener){
-			obj.addEventListener(ev,fun,false);
-		}else{
-			obj.attachEvent('on'+ev,fun);
-		}
-	}
-	//当前button显示标识
-	function showButton(obj){
-		var btns=document.getElementsByTagName('button');
-		for(var i=0;i<btns.length;i++){
-			btns[i].style.backgroundColor='#A52A2A';
-		}
-		obj.style.backgroundColor='#225400';
-	}
-	//停止所有定时器
-	function clearIntervals(){
-		for(var i=0;i<timers.length;i++){
-			if(timers[i]){
-				clearInterval(timers[i]);
-			}
-		}
-	}
-	/******
-	可视化遍历
-	******/
-
-	//深度优先遍历
-	function DFT(node,arr){
-		if(!!node){
-			arr.push(node);
-			for(var i=0;i<node.children.length;i++){
-				DFT(node.children[i],arr);
-			}
-		}
-		return arr;
-	}
-	//广度优先遍历
-	function BFT(node,arr){
-		if(!!node){
-			arr.push(node);
-			BFT(node.nextElementSibling,arr);//依次获取当前层的各个节点
-			var node=arr[BFIndex++];//依次获取每一层的各个节点
-			BFT(node.firstElementChild,arr);//获取当前节点对应的下一层的第一个节点
-		}
-		return arr;
-	}
-
-	//渲染
-	function render(obj,index,arr){
-		for(var i=0;i<odiv.length;i++){
-			odiv[i].style.backgroundColor='#fff';
-			if(arr){
-				for(var j=0;j<arr.length;j++){
-					arr[j].style.backgroundColor='#8C4600';
-				}
-			}
-		}
-		obj[index].style.backgroundColor='#A52A2A';
-	}
-	//绑定事件
-	addListener(dftBtn,'click',function(e){
-		stopDefault(e);
-		showButton(this);
-		clearIntervals();
-		listArray.length=0;
-		listArray=DFT(rootNode,listArray);
-		var index=0;
-		render(listArray,index++);
-		this.timer=setInterval(function(){
-			if(index==listArray.length){
-				listArray[listArray.length-1].style.backgroundColor='#fff';			
-				clearInterval(dftBtn.timer);
-				return;
-			}
-			render(listArray,index++);
-		},500);
-		timers.push(this.timer);
-	});
-
-	addListener(bftBtn,'click',function(e){
-		stopDefault(e);
-		showButton(this);
-		clearIntervals();
-		listArray.length=0;
-		listArray=BFT(rootNode,listArray);
-		BFIndex=0;
-		var index=0;
-		render(listArray,index++);
-		this.timer=setInterval(function(){
-			if(index==listArray.length){
-				listArray[listArray.length-1].style.backgroundColor='#fff';			
-				clearInterval(bftBtn.timer);
-				return;
-			}
-			render(listArray,index++);
-		},500);
-		timers.push(this.timer);
-	});
-	
-	/******
-	可视化遍历查找
-	******/
-
-	//可视化查找渲染
-	function seekRender(obj,item,fun){
-		seekFlag=false;
-		lastFlag=false;//匹配结果是否含有最后一个div
-		seekArray.length=0;
-		seekArray=fun(rootNode,seekArray);
-		var index=0;
-		//避免延迟
-		var seekArrayItem=seekArray[index].firstChild.nodeValue.replace(/\s/g,'');
-		if(seekArrayItem==item&&index<seekArray.length){
-			if(index==seekArray.length-1){
-				lastFlag=true;
-			}
-			seekFlag=true;
-			resultArray.push(seekArray[index]);
-		}
-		render(seekArray,index++,resultArray);
-		timers.push(obj.timer=setInterval(function(){
-			//当前节点内所包含的内容
-			if(index==seekArray.length){			
-				if(!lastFlag){
-					seekArray[seekArray.length-1].style.backgroundColor='#fff';
-				}else{
-					odiv[odiv.length-1].style.backgroundColor='#8C4600';
-				}				
-				clearInterval(obj.timer);
-				return;
-			}
-			var seekArrayItem=seekArray[index].firstChild.nodeValue.replace(/\s/g,'');
-			if(seekArrayItem==item&&index<seekArray.length){
-				if(index==seekArray.length-1){
-					lastFlag=true;
-				}
-				seekFlag=true;
-				resultArray.push(seekArray[index]);
-			}
-			if(!seekFlag&&index==seekArray.length-1){
-				//查找内容不存在时给出错误提示
-				showError.style.visibility='visible';
-			}
-			render(seekArray,index++,resultArray);
-		},500));
-	}
-
-
-	/******	
-	//深度优先遍历查找
-	function dft(node,item){
-		使用全局变量强制退出递归
-		if(isReturn){
-			isReturn=false;
-			return;
-		}
-		if(!!node){      										
-			seekArray.push(node);
-			for(var i=0;i<node.children.length;i++){
-				dft(node.children[i],item);
-			}
-		}
-		return seekArray;
-	} 
-	******/
-
-	//查找事件绑定
-	addListener(dftSeek,'click',function(e){
-		stopDefault(e);
-		showButton(this);
-		clearIntervals();
-		//input文本框字符串的验证
-		var item=inputText.value.toString().replace(/\s/g,'');//做空字符串处理
-		if(item==''){
-			alert('查找内容不能为空！');
-			return;
-		}
-		seekRender(dftSeek,item,DFT);
-	});
-	addListener(bftSeek,'click',function(e){
-		stopDefault(e);
-		showButton(this);
-		clearIntervals();
-		//input文本框字符串的验证
-		var item=inputText.value.toString().replace(/\s/g,'');//做空字符串处理
-		if(item==''){
-			alert('查找内容不能为空！');
-			return;
-		}
-		BFIndex=0;
-		seekRender(bftSeek,item,BFT);		
-	});
-
-	//文本框获得焦点错误提示信息消失
-	addListener(inputText,'focus',function(){		
-		showError.style.visibility='hidden';
-	});
-	//文本框回车事件
-	addListener(inputText,'keydown',function(ev){
-		var e=ev||window.ev;
-		if(e.keyCode==13){
-			dftSeek.focus();
-		}
-	});
 </script>
 </html>
